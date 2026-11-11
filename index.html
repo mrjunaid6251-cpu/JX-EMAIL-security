@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JX GAMING EMAIL VAULT</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;
+ font-family:Arial,sans-serif;
+ color:white;background:#050816;
+}
+#bg{
+ position:fixed;inset:0;
+ width:100%;height:100%;
+ object-fit:contain;z-index:-2;
+}
+.overlay{
+ position:fixed;inset:0;
+ background:#030716a8;
+ backdrop-filter:blur(2px);
+ z-index:-1;
+}
+.container{
+ width:100%;max-width:650px;
+ min-height:100vh;margin:auto;
+ padding:20px 14px;
+ display:flex;flex-direction:column;
+ justify-content:center;
+}
+header{text-align:center;margin-bottom:25px}
+header h1{
+ color:#42e8ff;font-size:35px;
+ letter-spacing:3px;
+ text-shadow:0 0 20px #00d9ff;
+}
+header p{letter-spacing:3px;color:#ddd}
+.panel,.account{
+ background:#091329d9;
+ border:1px solid #42e8ff66;
+ border-radius:17px;
+ padding:19px;margin-bottom:14px;
+ backdrop-filter:blur(13px);
+ box-shadow:0 8px 35px #0008;
+}
+input{
+ width:100%;padding:14px;
+ border-radius:10px;border:1px solid #42e8ff;
+ background:#07101f;color:white;
+ font-size:16px;margin:12px 0;
+}
+button{
+ padding:12px 15px;margin:5px;
+ border:0;border-radius:10px;
+ color:white;font-weight:bold;
+ background:linear-gradient(100deg,#00bcd4,#7356e8);
+ cursor:pointer;
+}
+button:active{transform:scale(.96)}
+.hidden{display:none}
+.account{
+ padding:0;overflow:hidden;
+}
+.account-head{
+ padding:17px;display:flex;
+ justify-content:space-between;
+ align-items:center;gap:8px;
+ cursor:pointer;
+}
+.email{font-size:14px;overflow-wrap:anywhere}
+.tag{color:#42e8ff;font-size:11px}
+.actions{
+ padding:12px;
+ border-top:1px solid #42e8ff44;
+}
+.actions button{font-size:12px}
+.error{color:#ff7777;font-size:13px}
+</style>
+</head>
+<body>
+
+<video id="bg" autoplay muted loop playsinline>
+ <source src="9205.mp4" type="video/mp4">
+</video>
+<div class="overlay"></div>
+
+<div class="container">
+
+<header>
+<h1>JX GAMING</h1>
+<p>PRIVATE EMAIL VAULT</p>
+</header>
+
+<section class="panel" id="login">
+<h3>ENTER PASSWORD</h3>
+<input id="master" type="password"
+placeholder="Website Password">
+<button onclick="login()">UNLOCK</button>
+<div id="error" class="error"></div>
+</section>
+
+<section id="vault" class="hidden">
+<div class="panel">
+<h3>GMAIL ACCOUNTS</h3>
+<p>Choose an account to copy details.</p>
+</div>
+<div id="accounts"></div>
+</section>
+
+</div>
+
+<script>
+const WEBSITE_PASSWORD="JX GAMING";
+const EMAIL_PASSWORD="Junaid@69king!";
+
+const emails=[
+"mr.junaid6251@gmail.com",
+"bdcyclone7@gmail.com",
+"qoyidusute72@gmail.com",
+"junaidmr300@gmail.com",
+"rff695832@gmail.com",
+"junaidhasan6088@gmail.com"
+];
+
+function login(){
+ if(document.getElementById("master").value
+ === WEBSITE_PASSWORD){
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("vault").classList.remove("hidden");
+ }else{
+  document.getElementById("error").textContent=
+  "Wrong Password!";
+ }
+}
+
+async function copyText(text){
+ try{
+  await navigator.clipboard.writeText(text);
+  alert("Copied Successfully!");
+ }catch(e){
+  const input=document.createElement("textarea");
+  input.value=text;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand("copy");
+  input.remove();
+  alert("Copied!");
+ }
+}
+
+const list=document.getElementById("accounts");
+
+emails.forEach(email=>{
+ const card=document.createElement("div");
+ card.className="account";
+
+ const head=document.createElement("div");
+ head.className="account-head";
+
+ const address=document.createElement("b");
+ address.className="email";
+ address.textContent=email;
+
+ const tag=document.createElement("span");
+ tag.className="tag";
+ tag.textContent="OPEN +";
+
+ head.append(address,tag);
+
+ const actions=document.createElement("div");
+ actions.className="actions hidden";
+
+ function addButton(label,action){
+  const btn=document.createElement("button");
+  btn.textContent=label;
+  btn.onclick=action;
+  actions.appendChild(btn);
+ }
+
+ addButton("EMAIL COPY",()=>copyText(email));
+ addButton("PASSWORD COPY",()=>copyText(EMAIL_PASSWORD));
+ addButton("COPY BOTH",()=>copyText(
+  "Email: "+email+
+  "\nPassword: "+EMAIL_PASSWORD
+ ));
+
+ head.onclick=()=>actions.classList.toggle("hidden");
+
+ card.append(head,actions);
+ list.appendChild(card);
+});
+</script>
+
+</body>
+</html>
